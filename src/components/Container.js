@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useRef, useState} from 'react';
 import { Card } from './Card';
 import '../components/style.css';
 import data from '../data';
@@ -10,14 +10,15 @@ export const Container = () => {
     const [fileCount, setFileCount] = useState(0);
     const [checkedEle, setCheckedEle] = useState([]);
     const [cards, setCards] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(false);
+    const isLoading = useRef(false);
 
     useEffect(() => {
-        setTimeout(() => {
-            setCards(data);
-            setIsLoading(false);
-        }, 2000); 
+        isLoading.current =true;
+        setCards(data);
+        isLoading.current =false;
     }, []);
+
 
     const handleCheckboxChange = (event, id) => {
         if (event) {
@@ -85,9 +86,9 @@ export const Container = () => {
     }, [cards]);
 
     return <div>
-        {isLoading ? (
+        {isLoading.current ? (
             <div className="loader">
-                <FadeLoader height={15} color={'rgb(54, 215, 183)'} loading={isLoading} />
+                <FadeLoader height={15} color={'rgb(54, 215, 183)'} loading={isLoading.current} />
             </div>
         ) : (
             <div className='d-flex align-items-center justify-content-center bg-custom-secondary'>
