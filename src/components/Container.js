@@ -1,22 +1,17 @@
-import { useCallback, useEffect, useRef, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card } from './Card';
 import '../components/style.css';
 import data from '../data';
 import Swal from 'sweetalert2'
-import FadeLoader from "react-spinners/FadeLoader";
 
 export const Container = () => {
 
     const [fileCount, setFileCount] = useState(0);
     const [checkedEle, setCheckedEle] = useState([]);
     const [cards, setCards] = useState([]);
-    // const [isLoading, setIsLoading] = useState(false);
-    const isLoading = useRef(false);
 
     useEffect(() => {
-        isLoading.current =true;
         setCards(data);
-        isLoading.current =false;
     }, []);
 
 
@@ -86,40 +81,34 @@ export const Container = () => {
     }, [cards]);
 
     return <div>
-        {isLoading.current ? (
-            <div className="loader">
-                <FadeLoader height={15} color={'rgb(54, 215, 183)'} loading={isLoading.current} />
-            </div>
-        ) : (
-            <div className='d-flex align-items-center justify-content-center bg-custom-secondary'>
-                <div className='image-gallery'>
-                    <div className='d-flex justify-content-between px-5 py-2'>
+        {cards && <div className='d-flex align-items-center justify-content-center bg-custom-secondary'>
+            <div className='image-gallery'>
+                <div className='d-flex justify-content-between align-items-center px-5 py-2'>
 
-                        {fileCount === 0 && (
-                            <h5>Gallery</h5>
-                        )}
+                    {fileCount === 0 && (
+                        <h5>Gallery</h5>
+                    )}
 
-                        {fileCount > 0 && (
-                            <div className='d-flex align-items-center'>
-                                <input type="checkbox" name="image2" id="image2" checked={fileCount > 0} />
-                                <h5 className='ps-3'>{fileCount <= 1 ? `${fileCount} File Selected` : `${fileCount} Files Selected`}</h5>
-                            </div>
-                        )}
-                        {fileCount > 0 && (
-                            <h6 className='text-danger cursor-pointer' onClick={handleDeleteFiles}>{fileCount <= 1 ? `Delete file` : `Delete files`}</h6>
-                        )}
-                    </div>
-                    <hr />
-                    <div className='container' >
-                        {cards?.map((card, i) => (
-                            <div key={card.id} className={i === 0 ? 'item1 cursor-grab' : 'cursor-grab'}>
-                                <Card key={card.id} index={i} id={card.id} image={card.image} moveCard={moveCard} handleCheckboxChange={handleCheckboxChange} />
-                            </div>
-                        ))}
-                    </div>
-
+                    {fileCount > 0 && (
+                        <div className='d-flex align-items-center'>
+                            <input type="checkbox" name="image2" id="image2" checked={fileCount > 0} />
+                            <h5 className='ps-3'>{fileCount <= 1 ? `${fileCount} File Selected` : `${fileCount} Files Selected`}</h5>
+                        </div>
+                    )}
+                    {fileCount > 0 && (
+                        <h6 className='text-danger cursor-pointer' onClick={handleDeleteFiles}>{fileCount <= 1 ? `Delete file` : `Delete files`}</h6>
+                    )}
                 </div>
+                <hr />
+                <div className='container' >
+                    {cards?.map((card, i) => (
+                        <div key={card.id} className={i === 0 ? 'item1 cursor-grab' : 'cursor-grab'}>
+                            <Card key={card.id} index={i} id={card.id} image={card.image} moveCard={moveCard} handleCheckboxChange={handleCheckboxChange} />
+                        </div>
+                    ))}
+                </div>
+
             </div>
-        )}
+        </div>}
     </div>;
 };
